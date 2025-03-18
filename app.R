@@ -1,5 +1,6 @@
 library(shiny)
 
+
 # Définition de l'interface utilisateur (UI)
 ui - fluidPage(
   titlePanel(Mon Application Shiny),
