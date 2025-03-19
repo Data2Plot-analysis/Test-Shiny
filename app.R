@@ -1,20 +1,22 @@
 library(shiny)
+library(ggplot2)
 
 # Interface utilisateur (UI)
 ui <- fluidPage(
-  titlePanel("Mon Application Shiny"),  # Ajout des guillemets autour du texte
+  titlePanel("Mon Application Shiny avec ggplot2"),
   
   sidebarLayout(
     sidebarPanel(
       sliderInput("num", 
-                  "Choisissez un nombre :",  # Ajout des guillemets
+                  "Choisissez un nombre :",  
                   min = 1, 
                   max = 100, 
                   value = 50)
     ),
     
     mainPanel(
-      textOutput("valeur")
+      textOutput("valeur"),
+      plotOutput("plot")
     )
   )
 )
@@ -22,7 +24,15 @@ ui <- fluidPage(
 # Serveur (logique)
 server <- function(input, output) {
   output$valeur <- renderText({
-    paste("Vous avez choisi le nombre :", input$num)  # Ajout des guillemets
+    paste("Vous avez choisi le nombre :", input$num)
+  })
+  
+  output$plot <- renderPlot({
+    data <- data.frame(x = 1:input$num, y = (1:input$num)^2)
+    ggplot(data, aes(x = x, y = y)) +
+      geom_line(color = "blue") +
+      geom_point(color = "red") +
+      labs(title = "Courbe quadratique", x = "X", y = "X^2")
   })
 }
 
