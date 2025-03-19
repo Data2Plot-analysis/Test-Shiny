@@ -1,9 +1,9 @@
 library(shiny)
-library(ggplot2)
+library(plotly)
 
 # Interface utilisateur (UI)
 ui <- fluidPage(
-  titlePanel("Mon Application Shiny avec ggplot2"),
+  titlePanel("Mon Application Shiny avec Plotly"),
   
   sidebarLayout(
     sidebarPanel(
@@ -16,7 +16,7 @@ ui <- fluidPage(
     
     mainPanel(
       textOutput("valeur"),
-      plotOutput("plot")
+      plotlyOutput("plot")
     )
   )
 )
@@ -27,12 +27,11 @@ server <- function(input, output) {
     paste("Vous avez choisi le nombre :", input$num)
   })
   
-  output$plot <- renderPlot({
+  output$plot <- renderPlotly({
     data <- data.frame(x = 1:input$num, y = (1:input$num)^2)
-    ggplot(data, aes(x = x, y = y)) +
-      geom_line(color = "blue") +
-      geom_point(color = "red") +
-      labs(title = "Courbe quadratique", x = "X", y = "X^2")
+    plot_ly(data, x = ~x, y = ~y, type = 'scatter', mode = 'lines+markers',
+            line = list(color = 'blue'), marker = list(color = 'red')) %>%
+      layout(title = "Courbe quadratique", xaxis = list(title = "X"), yaxis = list(title = "X^2"))
   })
 }
 
